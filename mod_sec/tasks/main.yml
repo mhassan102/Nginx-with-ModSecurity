@@ -1,0 +1,17 @@
+ - name: Download ModSecurity
+   get_url:
+     url: https://www.modsecurity.org/tarball/{{modsec_version}}/modsecurity-{{modsec_version}}.tar.gz
+     dest: "{{ ansible_env.HOME}}/modsecurity-{{modsec_version}}.tar.gz"
+
+ - name: Extract ModSecurity
+   shell: tar -xzf modsecurity-{{modsec_version}}.tar.gz
+   args:
+     chdir: "{{ ansible_env.HOME}}"
+
+ - name: Build ModSecurity
+   shell: "{{ item }}"
+   args:
+     chdir: "{{ ansible_env.HOME}}/modsecurity-{{modsec_version}}"
+   with_items:
+     - ./configure --enable-standalone-module 
+     - make

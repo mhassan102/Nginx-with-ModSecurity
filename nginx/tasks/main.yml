@@ -1,0 +1,47 @@
+ - name: Download Ngnix
+   get_url:
+     url: http://nginx.org/download/nginx-{{nginx_version}}.tar.gz
+     dest: "{{ ansible_env.HOME }}/nginx-{{nginx_version}}.tar.gz"
+
+ - name: Extract Ngnix
+   shell: tar -xzf nginx-{{nginx_version}}.tar.gz
+   args:
+     chdir: "{{ ansible_env.HOME }}"
+
+ - name: Build Ngnix with Mod-Security
+   shell: "{{ item }}"
+   args:
+     chdir: "{{ ansible_env.HOME }}/nginx-{{nginx_version}}"
+   with_items:
+     - ./configure 
+       --user=www-data 
+       --group=www-data 
+       --with-debug 
+       --with-ipv6 
+       --with-http_ssl_module 
+       --add-module=/root/modsecurity-{{modsec_version}}/nginx/modsecurity 
+     - make
+     - make install
+
+ - name: Copy service file
+   copy: 
+     src: nginx 
+     dest: /etc/init.d/nginx
+     mode: "a+x"
+
+ - name: Creates log directory
+   file: path=/var/log/nginx state=directory
+
+ - include : mod_sec_conf.yml
+ - include : owasp.yml
+
+ - name: Copy nginx configuration in place
+   template:
+     src: nginx.conf.j2
+     dest: "{{ nginx_conf_file_path }}"
+     owner: root
+     group: "{{ root_group }}"
+     mode: 0644
+   notify:
+     - reload nginx
+

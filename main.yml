@@ -1,0 +1,13 @@
+- name: Nginx with ModSecurity
+  hosts: "{{ hosts }}"
+  gather_facts: yes
+  vars:
+    nginx_version: "1.10.1"
+    modsec_version: "2.9.1"
+
+  roles:
+
+    - { role: update }
+    - { role: mod_sec }
+    - { role: nginx }
+

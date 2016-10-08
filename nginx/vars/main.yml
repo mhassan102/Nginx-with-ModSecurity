@@ -1,0 +1,19 @@
+root_group: root
+nginx_conf_path: /etc/nginx/conf.d
+nginx_conf_file_path: "/usr/local/nginx/conf/nginx.conf"
+nginx_pidfile: /run/nginx.pid
+__nginx_user: "www-data"
+nginx_user: "www-data"
+nginx_server_listen: 80
+nginx_server_name: localhost
+nginx_error_log: "/var/log/nginx/error.log warn"
+nginx_access_log: "/var/log/nginx/access.log"
+nginx_keepalive_timeout: "65"
+nginx_keepalive_requests: "100"
+nginx_worker_processes: "{{ ansible_processor_vcpus | default(ansible_processor_count) }}"
+nginx_worker_connections: "1024"
+nginx_sendfile: "on"
+nginx_tcp_nopush: "on"
+nginx_mod_sec_conf_path : "/usr/local/nginx/conf/modsecurity.conf"
+nginx_modsec_SecRuleEngine: "On"
+nginx_modsec_SecRequestBodyAccess: "On"

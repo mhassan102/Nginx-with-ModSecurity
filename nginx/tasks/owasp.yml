@@ -1,0 +1,19 @@
+
+ - name: Download OWASP
+   get_url:
+     url: https://github.com/SpiderLabs/owasp-modsecurity-crs/tarball/master
+     dest: "{{ ansible_env.HOME }}/owasp.tar.gz"
+
+ - name: Extract OWASP
+   shell: tar -xzf owasp.tar.gz
+   args:
+     chdir: "{{ ansible_env.HOME }}"
+
+ - name: Set OWASP Dir
+   shell: (cd /root; find . -maxdepth 1 -type d -name SpiderLabs-*)
+   register: files_to_copy
+
+ - name: ModSecurity CRS append to modsecurity conf
+   shell: (cat {{ ansible_env.HOME }}/{{ item }}/modsecurity_crs_10_setup.conf.example >> /usr/local/nginx/conf/modsecurity.conf)
+   with_items: files_to_copy.stdout
+

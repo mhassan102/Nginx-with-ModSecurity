@@ -1,0 +1,16 @@
+
+  - name: Execute updates
+    apt: update_cache=yes
+
+  - name: Install list of dependent packages
+    apt: name={{item}} state=installed
+    with_items:
+       - build-essential 
+       - libpcre3
+       - libpcre3-dev
+       - libssl-dev
+       - libtool
+       - autoconf
+       - apache2-dev
+       - libxml2-dev
+       - libcurl4-openssl-dev

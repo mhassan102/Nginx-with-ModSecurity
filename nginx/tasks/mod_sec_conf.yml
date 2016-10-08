@@ -1,0 +1,11 @@
+
+ - name: Copy Mod Security config in Nginx
+   template:
+     src: modsecurity.conf.j2
+     dest: "{{ nginx_mod_sec_conf_path }}"
+     owner: root
+     group: "{{ root_group }}"
+     mode: 0644
+
+ - name: Copy unicode mapping file
+   command: cp /root/modsecurity-{{modsec_version}}//unicode.mapping /usr/local/nginx/conf/
